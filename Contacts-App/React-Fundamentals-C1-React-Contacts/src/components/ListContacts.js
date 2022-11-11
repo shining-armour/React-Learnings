@@ -1,4 +1,4 @@
-const ListContacts = ({ contactsList }) => {
+const ListContacts = ({ contactsList, onDeleteContact }) => {
     
     console.log(contactsList);
 
@@ -11,7 +11,7 @@ const ListContacts = ({ contactsList }) => {
                         <p>{contact.name}</p>
                         <p>{contact.handle}</p>
                     </div>
-                    <button className="contact-remove"></button>
+                    <button className="contact-remove" onClick={()=>onDeleteContact(contact)}></button>
                 </li>)
             }
         </ol>
