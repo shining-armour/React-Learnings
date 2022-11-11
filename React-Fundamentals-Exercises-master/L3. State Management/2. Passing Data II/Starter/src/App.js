@@ -1,6 +1,7 @@
 import "./App.css";
 import logo from "./logo.svg";
-
+import MoviesList from "./MoviesList";
+import UserList from "./UserList";
 // Display a list of movies where each movie contains a list of users that favorited it.
 // For detailed instructions, refer to Instructions.md.
 
@@ -94,6 +95,22 @@ const movies = {
 };
 
 const App = () => {
+
+  let userIDsForMovieIDs = {};
+
+  // creating a map in format -  { movieID :  [userID, userID,...] , ...}
+  profiles.map((profile) => {
+      // if movie id key already exists - add current user id to list
+      if(userIDsForMovieIDs[profile.favoriteMovieID]){
+        userIDsForMovieIDs[profile.favoriteMovieID].push(profile.userID)
+      } else // create movie id key and for value, create a list of length 1 with current user id
+      {
+        userIDsForMovieIDs[profile.favoriteMovieID] = [profile.userID]
+      }
+  });
+
+  console.log(userIDsForMovieIDs)
+
   return (
     <div className="App">
       <header className="App-header">
@@ -101,6 +118,30 @@ const App = () => {
         <h1 className="App-title">ReactND - Coding Practice</h1>
       </header>
       <h2>How Popular is Your Favorite Movie?</h2>
+      {/*
+      Naive Approach
+       <ul>
+        {
+          Object.keys(movies).map((movieID)=>{
+            return (
+              <li key={movieID}>
+                <h2>{movies[movieID].name}</h2>
+                {
+                userIDsForMovieIDs[movieID] ? 
+                <div>
+                <p>Liked by:</p>
+                <ul>{
+                  userIDsForMovieIDs[movieID].map((userID) => {                  
+                    return <li key={userID}>{users[userID].name}</li>
+                  })
+                  }</ul>
+                  </div> : <p>Nobody liked it</p>}
+                </li>
+            );
+          })
+        }
+      </ul> */}
+      <MoviesList moviesList={movies} usersList={users} currentMovieUsers={userIDsForMovieIDs}/>
     </div>
   );
 };
