@@ -12,7 +12,7 @@ const App = () => {
     setItems([...items, item]);
   };
 
-  const handleDeleteLastItem = (event) => {
+  const handleDeleteLastItem = () => {
     setItems(items.slice(0, -1));
   };
 
@@ -26,10 +26,7 @@ const App = () => {
       </header>
       <h2>Shopping List</h2>
       <CreateNewItem onAddItem={handleAddItem} />
-      <DeleteLastItem
-        onDeleteLastItem={handleDeleteLastItem}
-        buttonDisabled={noItemsFound()}
-      />
+      <DeleteLastItem onDeleteLastItem={handleDeleteLastItem} buttonDisabled={noItemsFound} />
       <ItemList items={items} />
     </div>
   );

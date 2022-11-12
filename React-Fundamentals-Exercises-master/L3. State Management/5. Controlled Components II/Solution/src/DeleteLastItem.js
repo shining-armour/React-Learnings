@@ -1,12 +1,8 @@
 import PropTypes from "prop-types";
 
 const DeleteLastItem = ({ onDeleteLastItem, buttonDisabled }) => {
-  const handleDeleteLastItem = (event) => {
-    onDeleteLastItem();
-  };
-
   return (
-    <button onClick={handleDeleteLastItem} disabled={buttonDisabled}>
+    <button onClick={() => onDeleteLastItem()} disabled={buttonDisabled()}>
       Delete Last Item
     </button>
   );
