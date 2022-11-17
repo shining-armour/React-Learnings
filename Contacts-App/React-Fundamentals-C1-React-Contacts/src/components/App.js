@@ -2,6 +2,7 @@ import "../css/App.css";
 import { useState, useEffect} from "react";
 import ListContacts from "./ListContacts";
 import * as ContactsAPI from"../utils/ContactsAPI"
+import AddContact from "./AddContact";
 
 const App = () => {
 
@@ -15,6 +16,8 @@ const App = () => {
 
   // props should be avoided in useState 
   const [contacts, setContacts] = useState([])
+  const [screen, setScreen] = useState("list")
+
 
 
   useEffect(() => {
@@ -31,8 +34,10 @@ const App = () => {
   }, [])
 
   return (
+    // short circuit evaluation
     <div>
-      <ListContacts contactsList={contacts} onDeleteContact={removeContact}/>
+      {screen==="list" && <ListContacts contactsList={contacts} onDeleteContact={removeContact} onAddContact={() => setScreen("add")}/>}
+      {screen==="add" && <AddContact/>}
     </div>
   );
 

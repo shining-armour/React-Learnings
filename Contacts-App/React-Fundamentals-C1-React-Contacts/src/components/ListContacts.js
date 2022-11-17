@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from "prop-types";
 
-const ListContacts = ({ contactsList, onDeleteContact }) => {
+const ListContacts = ({ contactsList, onDeleteContact, onAddContact }) => {
     
     console.log(contactsList);
 
@@ -28,6 +28,7 @@ const ListContacts = ({ contactsList, onDeleteContact }) => {
 
         <form className='list-contacts-top'>
         <input className='search-contacts' type='text' placeholder='Search Contacts' value={searchQuery} onChange={(event) => updateSearchQuery(event.target.value)}/>
+        <a href='#create' onClick={onAddContact} className="add-contact">Add Contact</a>
         </form> 
 
         <ol className="contact-list">
@@ -48,7 +49,8 @@ const ListContacts = ({ contactsList, onDeleteContact }) => {
 
 ListContacts.propTypes = {
     contactsList: PropTypes.array.isRequired,
-    onDeleteContact: PropTypes.func.isRequired
+    onDeleteContact: PropTypes.func.isRequired,
+    onAddContact: PropTypes.func.isRequired
 }
 
 export default ListContacts;
