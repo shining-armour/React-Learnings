@@ -1,5 +1,6 @@
 import "../css/App.css";
 import { useState, useEffect} from "react";
+import { Route, Routes } from "react-router-dom"
 import ListContacts from "./ListContacts";
 import * as ContactsAPI from"../utils/ContactsAPI"
 import AddContact from "./AddContact";
@@ -16,7 +17,6 @@ const App = () => {
 
   // props should be avoided in useState 
   const [contacts, setContacts] = useState([])
-  const [screen, setScreen] = useState("list")
 
 
 
@@ -34,11 +34,10 @@ const App = () => {
   }, [])
 
   return (
-    // short circuit evaluation
-    <div>
-      {screen==="list" && <ListContacts contactsList={contacts} onDeleteContact={removeContact} onAddContact={() => setScreen("add")}/>}
-      {screen==="add" && <AddContact/>}
-    </div>
+    <Routes>
+      <Route exact path="/" element={<ListContacts contactsList={contacts} onDeleteContact={removeContact} />}/>
+      <Route path="/add" element={<AddContact/>}/>
+    </Routes>
   );
 
 };

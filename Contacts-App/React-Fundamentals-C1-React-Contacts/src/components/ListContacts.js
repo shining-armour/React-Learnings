@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
-const ListContacts = ({ contactsList, onDeleteContact, onAddContact }) => {
+const ListContacts = ({ contactsList, onDeleteContact }) => {
     
     console.log(contactsList);
 
@@ -28,7 +29,8 @@ const ListContacts = ({ contactsList, onDeleteContact, onAddContact }) => {
 
         <form className='list-contacts-top'>
         <input className='search-contacts' type='text' placeholder='Search Contacts' value={searchQuery} onChange={(event) => updateSearchQuery(event.target.value)}/>
-        <a href='#create' onClick={onAddContact} className="add-contact">Add Contact</a>
+        {/* <a href='#create' onClick={onAddContact} className="add-contact">Add Contact</a> */}
+        <Link to={"/add"} className="add-contact">Add Contact</Link>
         </form> 
 
         <ol className="contact-list">
@@ -50,7 +52,6 @@ const ListContacts = ({ contactsList, onDeleteContact, onAddContact }) => {
 ListContacts.propTypes = {
     contactsList: PropTypes.array.isRequired,
     onDeleteContact: PropTypes.func.isRequired,
-    onAddContact: PropTypes.func.isRequired
 }
 
 export default ListContacts;
