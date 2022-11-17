@@ -18,11 +18,16 @@ const App = () => {
 
 
   useEffect(() => {
+    let mounted=true
     const getContacts = async() => {
       const result = await ContactsAPI.getAll()
       setContacts(result)
     }
-    getContacts()
+    if(mounted) getContacts()
+
+    return () => {
+      mounted=false;
+    }
   }, [])
 
   return (

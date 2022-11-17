@@ -73,6 +73,7 @@ const ImageInput = ({ maxHeight, className, name }) => {
     setCanvas(document.createElement("canvas"));
     fileInput.form.addEventListener("reset", handleFormReset);
 
+    // Side effect clean up function - remove event listener if component is not mounted
     return () => {
       if (fileInput) {
         fileInput.form.removeEventListener("reset", handleFormReset);
