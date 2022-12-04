@@ -1,44 +1,3 @@
-/** LIBRARY CODE **/
-/**
- * Store contains following info -
- * The state tree
- * A way to get state tree
- * A way to listen for changes in state tree
- * A way to update state tree
- */
-function createStore(reducer) {
-  let state;
-
-  // keeps track of every time the user calls subscribe
-  let listeners = [];
-
-  const getState = () => state;
-
-  // invokes the listener function that was passed in
-  const subscribe = (listener) => {
-    listeners.push(listener);
-    // return users a way to unsubscribe from the invoked function
-    return () => {
-      // remove the current listener from the listeners list
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  };
-
-  const dispatch = (action) => {
-    state = reducer(state, action);
-    // re-invoke all the listeners inside listeners list
-    listeners.forEach((listener) => listener());
-  };
-
-  return {
-    getState, // used to get the current state from the store
-    subscribe, // used to provide a listener function the store will call when the state changes
-    dispatch, // used to make changes to the store's state
-  };
-}
-
-/** APP CODE **/
-
 // all event names for todos reducer
 const ADD_TODO = "ADD_TODO";
 const REMOVE_TODO = "REMOVE_TODO";
@@ -46,16 +5,6 @@ const TOGGLE_TODO = "TOGGLE_TODO";
 // all event names for goals reducer
 const ADD_GOAL = "ADD_GOAL";
 const REMOVE_GOAL = "REMOVE_GOAL";
-
-// Root reducer function
-function app(state = {}, action) {
-  // make state be an object containing state arrays for todos and goals
-  // !!!! DOUBT !!!! - How does empty state object has access to todos and goals inside it?
-  return {
-    todos: todos(state.todos, action),
-    goals: goals(state.goals, action),
-  };
-}
 
 // Reducer functions
 // Initially, the state will be empty hence, provide an empty array as default value
@@ -100,7 +49,8 @@ function generateId() {
 
 /** creating and calling store functions **/
 
-const store = createStore(app);
+// Redux's combineReducer works the same way as our custom root reducer
+const store = Redux.createStore(Redux.combineReducers({ todos, goals }));
 
 store.subscribe(() => {
   // Do something when state change is detected
@@ -164,23 +114,6 @@ function removeGoal(id) {
     id,
   };
 }
-
-//   store.dispatch(
-//     addTodo({
-//       id: 0,
-//       name: "Learning Redux",
-//       complete: false,
-//     })
-//   );
-//   store.dispatch(
-//     addGoal({
-//       id: 1,
-//       name: "Aim higher",
-//     })
-//   );
-//   store.dispatch(toggleTodo(0));
-//   store.dispatch(removeTodo(0));
-//   store.dispatch(removeGoal(1));
 
 /** DOM code **/
 
