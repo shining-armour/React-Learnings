@@ -1,0 +1,22 @@
+# Key points
+
+- The main goal of Redux is to make the state management of an application more predictable.
+- State tree is an object that stores the entire state for an application at one location.
+- 3-ways to interact with state tree -
+  - Getting the state
+  - Listening for changes to the state
+  - Updating the state
+- State tree + 3-ways to interact with State tree (GLU) = Store
+- Pure functions characteristics -
+  - Return the same result if the same arguments are passed in
+  - Depend solely on the arguments passed into them
+  - Do not produce side effects, such as API requests and I/O operations
+- Reducer function characteristics -
+  - Must be a pure function
+  - Takes in current application state and action
+  - Returns new state
+- Dispatch function inside our store is responsible for updating the actual state of the store
+- Dispatch works in the following way -
+  - dispatch() is called with an Action
+  - The reducer that was passed to createStore() is called with the current state tree and the action. This updates the state tree.
+  - Because the state has (potentially) changed, all listener functions that have been registered with the subscribe() method are called
