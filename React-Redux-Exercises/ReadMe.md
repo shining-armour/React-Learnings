@@ -25,3 +25,9 @@
 - Middleware
   - When store.dispatch() is called, the reducer runs and produces the new state tree for the store.
   - Between the dispatching of an action and the reducer running, we can introduce code called middleware to intercept the action before the reducer is invoked.
+  - Redux Middleware : A third-party extension point between dispatching an action, and the moment it reaches the reducer.
+  - Middleware can perform a variety of operations with the action received:-
+    - Producing a side effect (e.g., logging information about the store.
+    - Processing the action itself (e.g., making an asynchronous HTTP request)
+    - Redirecting the action (e.g., to another piece of middleware)
+    - Dispatching supplementary actions

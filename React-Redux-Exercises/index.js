@@ -50,7 +50,10 @@ function generateId() {
 /** creating and calling store functions **/
 
 // Redux's combineReducer works the same way as our custom root reducer
-const store = Redux.createStore(Redux.combineReducers({ todos, goals }));
+const store = Redux.createStore(
+  Redux.combineReducers({ todos, goals }),
+  Redux.applyMiddleware(numberCheckerMiddleware)
+);
 
 store.subscribe(() => {
   // Do something when state change is detected
@@ -84,14 +87,19 @@ function containsNumbers(str) {
   return /[0-9]/.test(str);
 }
 
-function checkAndDispatch(store, action) {
-  if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
-    return alert("Numbers not allowed!");
-  }
-  if (action.type === ADD_GOAL && containsNumbers(action.goal.name)) {
-    return alert("Numbers not allowed!");
-  }
-  return store.dispatch(action);
+// next represents the next middleware in line to be run OR if not exist, store.dispatch() will be treated as next.
+function numberCheckerMiddleware(store) {
+  return function (next) {
+    return function (action) {
+      if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
+        return alert("Numbers not allowed!");
+      }
+      if (action.type === ADD_GOAL && containsNumbers(action.goal.name)) {
+        return alert("Numbers not allowed!");
+      }
+      return next(action);
+    };
+  };
 }
 
 /** Action Creators **/
@@ -140,8 +148,7 @@ function addTodoToState() {
   const name = input.value;
   // clear input value
   input.value = "";
-  checkAndDispatch(
-    store,
+  store.dispatch(
     addTodo({
       id: generateId(),
       name: name,
@@ -155,8 +162,7 @@ function addGoalToState() {
   const name = input.value;
   // clear input value
   input.value = "";
-  checkAndDispatch(
-    store,
+  store.dispatch(
     addGoal({
       id: generateId(),
       name: name,
@@ -179,7 +185,7 @@ function addTodoToDOMList(todo) {
   const textNode = document.createTextNode(todo.name);
   const todoList = document.getElementById("todo-list");
   const removeBtn = createRemoveButton(() => {
-    checkAndDispatch(store, removeTodo(todo.id));
+    store.dispatch(removeTodo(todo.id));
   });
 
   listItemNode.appendChild(textNode);
@@ -188,7 +194,7 @@ function addTodoToDOMList(todo) {
 
   listItemNode.style.textDecoration = todo.complete ? "line-through" : "none";
   listItemNode.addEventListener("click", () => {
-    checkAndDispatch(store, toggleTodo(todo.id));
+    store.dispatch(toggleTodo(todo.id));
   });
 }
 
@@ -197,7 +203,7 @@ function addGoalToDOMList(goal) {
   const textNode = document.createTextNode(goal.name);
   const goalList = document.getElementById("goal-list");
   const removeBtn = createRemoveButton(() => {
-    checkAndDispatch(store, removeGoal(goal.id));
+    store.dispatch(removeGoal(goal.id));
   });
   listItemNode.appendChild(textNode);
   listItemNode.appendChild(removeBtn);
