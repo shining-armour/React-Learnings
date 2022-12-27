@@ -36,7 +36,33 @@
   - Syntax: _const store = Redux.createStore( <reducer-function>, Redux.applyMiddleware(<middleware-functions>))_
 
 - Higher Order functions
+
   - Redux middleware leverages a concept called higher-order functions.
   - A higher-order function is a function that either:
     - Accepts a function as an argument
     - Returns a function
+
+- When to use Refs
+
+  - Managing focus, text selection, or media playback
+  - Triggering imperative animations
+  - Integrating with third-party DOM libraries
+
+  ```
+    import { useEffect, useRef } from "react";
+
+    function MyComponent() {
+      const paragraphRef = useRef();
+
+      useEffect(() => {
+        console.log(paragraphRef.current);
+      }, []);
+
+      return <p ref={paragraphRef}>Hello from the paragraph!</p>;
+    }
+
+    export default MyComponent;
+  ```
+
+  - First, we invoke the useRef() hook and save the value to a variable: paragraphRef. This variable will be used to access the entire <p>Hello from the paragraph!</p> element later on.
+  - Then, for the ref prop on the actual element, we set its value to paragraphRef. When the components mounts to the DOM, the useEffect hook will be called, which will log the current value of paragraphRef to the console: <p>Hello from the paragraph!</p>. As such, a ref has been successfully used to allow us access to DOM elements directly!
