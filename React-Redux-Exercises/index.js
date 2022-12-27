@@ -54,6 +54,7 @@ function containsNumbers(str) {
 }
 
 // next represents the next middleware in line to be run OR if not exist, store.dispatch() will be treated as next.
+// next for numberCheckerMiddleware is loggerMiddleware
 const numberCheckerMiddleware = (store) => (next) => (action) => {
   if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
     return alert("Numbers not allowed!");
@@ -64,12 +65,21 @@ const numberCheckerMiddleware = (store) => (next) => (action) => {
   return next(action);
 };
 
+// next for loggerMiddleware is store.dispatch()
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.group(action.type);
+  console.log("Action - ", action);
+  next(action);
+  console.log("State change to - ", store.getState());
+  console.groupEnd();
+};
+
 /** creating and calling store functions **/
 
 // Redux's combineReducer works the same way as our custom root reducer
 const store = Redux.createStore(
   Redux.combineReducers({ todos, goals }),
-  Redux.applyMiddleware(numberCheckerMiddleware)
+  Redux.applyMiddleware(numberCheckerMiddleware, loggerMiddleware)
 );
 
 store.subscribe(() => {
@@ -169,6 +179,7 @@ function addGoalToState() {
 document.getElementById("addTodoBtn").addEventListener("click", addTodoToState);
 document.getElementById("addGoalBtn").addEventListener("click", addGoalToState);
 
+// Higher Order function
 function createRemoveButton(onClickCallback) {
   const removeBtn = document.createElement("button");
   removeBtn.innerHTML = "X";

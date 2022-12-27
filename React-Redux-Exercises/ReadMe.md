@@ -23,6 +23,7 @@
   - Because the state has (potentially) changed, all listener functions that have been registered with the subscribe() method are called.
 
 - Middleware
+
   - When store.dispatch() is called, the reducer runs and produces the new state tree for the store.
   - Between the dispatching of an action and the reducer running, we can introduce code called middleware to intercept the action before the reducer is invoked.
   - Redux Middleware : A third-party extension point between dispatching an action, and the moment it reaches the reducer.
@@ -31,3 +32,9 @@
     - Processing the action itself (e.g., making an asynchronous HTTP request)
     - Redirecting the action (e.g., to another piece of middleware)
     - Dispatching supplementary actions
+
+- Higher Order functions
+  - Redux middleware leverages a concept called higher-order functions.
+  - A higher-order function is a function that either:
+    - Accepts a function as an argument
+    - Returns a function
