@@ -53,8 +53,20 @@ function containsNumbers(str) {
   return /[0-9]/.test(str);
 }
 
+// first Middleware
+const emptyInputCheckerMiddleware = (store) => (next) => (action) => {
+  if (action.type === ADD_TODO && action.todo.name.trim() === "") {
+    return alert("Empty todo not allowed!");
+  }
+  if (action.type === ADD_GOAL && action.goal.name.trim() === "") {
+    return alert("Empty goal not allowed!");
+  }
+  next(action);
+};
+
 // next represents the next middleware in line to be run OR if not exist, store.dispatch() will be treated as next.
-// next for numberCheckerMiddleware is loggerMiddleware
+// next for numberCheckerMiddleware is validActionsMiddleware
+// second Middleware
 const numberCheckerMiddleware = (store) => (next) => (action) => {
   if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
     return alert("Numbers not allowed!");
@@ -65,7 +77,20 @@ const numberCheckerMiddleware = (store) => (next) => (action) => {
   return next(action);
 };
 
+// next for validActionsMiddleware is loggerMiddleware
+// third middleware
+const validActionsMiddleware = (store) => (next) => (action) => {
+  if (action.type === ADD_TODO) {
+    alert("Don't forget to " + action.todo.name.toString());
+  }
+  if (action.type === ADD_GOAL) {
+    alert("That's a great goal!");
+  }
+  return next(action);
+};
+
 // next for loggerMiddleware is store.dispatch()
+// fourth Middleware
 const loggerMiddleware = (store) => (next) => (action) => {
   console.group(action.type);
   console.log("Action - ", action);
@@ -79,7 +104,12 @@ const loggerMiddleware = (store) => (next) => (action) => {
 // Redux's combineReducer works the same way as our custom root reducer
 const store = Redux.createStore(
   Redux.combineReducers({ todos, goals }),
-  Redux.applyMiddleware(numberCheckerMiddleware, loggerMiddleware)
+  Redux.applyMiddleware(
+    emptyInputCheckerMiddleware,
+    numberCheckerMiddleware,
+    validActionsMiddleware,
+    loggerMiddleware
+  )
 );
 
 store.subscribe(() => {

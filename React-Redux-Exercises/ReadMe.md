@@ -32,6 +32,8 @@
     - Processing the action itself (e.g., making an asynchronous HTTP request)
     - Redirecting the action (e.g., to another piece of middleware)
     - Dispatching supplementary actions
+  - Multiple middlewares are ran in the order in which they are passed to applyMiddleware() function.
+  - Syntax: _const store = Redux.createStore( <reducer-function>, Redux.applyMiddleware(<middleware-functions>))_
 
 - Higher Order functions
   - Redux middleware leverages a concept called higher-order functions.
