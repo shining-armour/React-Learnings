@@ -47,6 +47,23 @@ function generateId() {
   );
 }
 
+/** Middleware */
+
+function containsNumbers(str) {
+  return /[0-9]/.test(str);
+}
+
+// next represents the next middleware in line to be run OR if not exist, store.dispatch() will be treated as next.
+const numberCheckerMiddleware = (store) => (next) => (action) => {
+  if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
+    return alert("Numbers not allowed!");
+  }
+  if (action.type === ADD_GOAL && containsNumbers(action.goal.name)) {
+    return alert("Numbers not allowed!");
+  }
+  return next(action);
+};
+
 /** creating and calling store functions **/
 
 // Redux's combineReducer works the same way as our custom root reducer
@@ -80,27 +97,6 @@ const unsubscribe = store.subscribe(() => {
 // When func 2 isn't needed to be listened anymore,
 // subscribe has a return value as a function which when invoked remove currently subscribed func from the listeners array.
 //   unsubscribe();
-
-/** Middleware */
-
-function containsNumbers(str) {
-  return /[0-9]/.test(str);
-}
-
-// next represents the next middleware in line to be run OR if not exist, store.dispatch() will be treated as next.
-function numberCheckerMiddleware(store) {
-  return function (next) {
-    return function (action) {
-      if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
-        return alert("Numbers not allowed!");
-      }
-      if (action.type === ADD_GOAL && containsNumbers(action.goal.name)) {
-        return alert("Numbers not allowed!");
-      }
-      return next(action);
-    };
-  };
-}
 
 /** Action Creators **/
 
