@@ -17,6 +17,11 @@
   - Returns new state
 - Dispatch function inside our store is responsible for updating the actual state of the store
 - Dispatch works in the following way -
+
   - dispatch() is called with an Action
   - The reducer that was passed to createStore() is called with the current state tree and the action. This updates the state tree.
-  - Because the state has (potentially) changed, all listener functions that have been registered with the subscribe() method are called
+  - Because the state has (potentially) changed, all listener functions that have been registered with the subscribe() method are called.
+
+- Middleware
+  - When store.dispatch() is called, the reducer runs and produces the new state tree for the store.
+  - Between the dispatching of an action and the reducer running, we can introduce code called middleware to intercept the action before the reducer is invoked.

@@ -78,6 +78,22 @@ const unsubscribe = store.subscribe(() => {
 // subscribe has a return value as a function which when invoked remove currently subscribed func from the listeners array.
 //   unsubscribe();
 
+/** Middleware */
+
+function containsNumbers(str) {
+  return /[0-9]/.test(str);
+}
+
+function checkAndDispatch(store, action) {
+  if (action.type === ADD_TODO && containsNumbers(action.todo.name)) {
+    return alert("Numbers not allowed!");
+  }
+  if (action.type === ADD_GOAL && containsNumbers(action.goal.name)) {
+    return alert("Numbers not allowed!");
+  }
+  return store.dispatch(action);
+}
+
 /** Action Creators **/
 
 function addTodo(todo) {
@@ -118,11 +134,14 @@ function removeGoal(id) {
 /** DOM code **/
 
 function addTodoToState() {
+  console.log("Entered add todo");
+
   const input = document.getElementById("todo");
   const name = input.value;
   // clear input value
   input.value = "";
-  store.dispatch(
+  checkAndDispatch(
+    store,
     addTodo({
       id: generateId(),
       name: name,
@@ -136,7 +155,8 @@ function addGoalToState() {
   const name = input.value;
   // clear input value
   input.value = "";
-  store.dispatch(
+  checkAndDispatch(
+    store,
     addGoal({
       id: generateId(),
       name: name,
@@ -159,7 +179,7 @@ function addTodoToDOMList(todo) {
   const textNode = document.createTextNode(todo.name);
   const todoList = document.getElementById("todo-list");
   const removeBtn = createRemoveButton(() => {
-    store.dispatch(removeTodo(todo.id));
+    checkAndDispatch(store, removeTodo(todo.id));
   });
 
   listItemNode.appendChild(textNode);
@@ -168,7 +188,7 @@ function addTodoToDOMList(todo) {
 
   listItemNode.style.textDecoration = todo.complete ? "line-through" : "none";
   listItemNode.addEventListener("click", () => {
-    store.dispatch(toggleTodo(todo.id));
+    checkAndDispatch(store, toggleTodo(todo.id));
   });
 }
 
@@ -177,7 +197,7 @@ function addGoalToDOMList(goal) {
   const textNode = document.createTextNode(goal.name);
   const goalList = document.getElementById("goal-list");
   const removeBtn = createRemoveButton(() => {
-    store.dispatch(removeGoal(goal.id));
+    checkAndDispatch(store, removeGoal(goal.id));
   });
   listItemNode.appendChild(textNode);
   listItemNode.appendChild(removeBtn);
